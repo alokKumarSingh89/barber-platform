@@ -17,7 +17,10 @@
     "forceConsistentCasingInFileNames": true
   },
 
-  "include": ["src/**/*.ts"],
+  "include": [
+    "src/**/*.ts",
+    "../../apps/auth-service/src/auth/auth.controller.ts"
+  ],
 
   "exclude": ["dist", "node_modules"]
 }
