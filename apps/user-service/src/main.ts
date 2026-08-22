@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { loadEnv } from '@barber/config';
+import { RpcExceptionFilter } from './common/rpc-exception.filter';
 
 async function bootstrap() {
   const config = loadEnv();
@@ -17,6 +18,7 @@ async function bootstrap() {
       },
     },
   );
+  app.useGlobalFilters(new RpcExceptionFilter());
   await app.listen();
 }
 bootstrap().catch(console.error);

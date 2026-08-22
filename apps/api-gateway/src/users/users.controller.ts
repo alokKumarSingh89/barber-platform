@@ -1,6 +1,7 @@
 import { Controller, Get, Inject, Param } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
+import { USER_PATTERNS } from '@barber/contracts';
 
 @Controller('users')
 export class UsersController {
@@ -11,7 +12,7 @@ export class UsersController {
   @Get(':id')
   async getUser(@Param('id') id: string) {
     return firstValueFrom(
-      this.userClient.send<unknown>('users.get', { userId: id }),
+      this.userClient.send<unknown>(USER_PATTERNS.GET, { userId: id }),
     );
   }
 }
