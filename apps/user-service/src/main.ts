@@ -10,6 +10,8 @@ async function bootstrap() {
       options: {
         servers: [process.env.NATS_URL ?? 'nats://localhost:4222'],
         queue: 'user-service',
+        gracefulShutdown: true,
+        gracePeriod: 5000,
       },
     },
   );

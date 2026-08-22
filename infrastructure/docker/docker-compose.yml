@@ -1,7 +1,21 @@
 services:
+  postgres:
+    image: postgres:17
+    container_name: barber-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: barber
+      POSTGRES_PASSWORD: barber
+      POSTGRES_DB: barber
+    ports:
+      - "5432:5432"
+    volumes:
+      - barber_postgres_data:/var/lib/postgresql/data
+
   nats:
     image: nats:2.11-alpine
     container_name: barber-nats
+    restart: unless-stopped
     ports:
       - "4222:4222"
       - "8222:8222"
@@ -9,3 +23,6 @@ services:
       - "-js"
       - "-m"
       - "8222"
+
+volumes:
+  barber_postgres_data:

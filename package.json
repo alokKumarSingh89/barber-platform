@@ -1,22 +1,21 @@
 {
   "name": "barber-platform",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "0.0.1",
+  "private": true,
   "scripts": {
     "dev": "turbo dev",
     "build": "turbo build",
     "test": "turbo test",
     "lint": "turbo lint",
     "typecheck": "turbo typecheck",
-    "format": "prettier --write ."
+    "db:generate": "pnpm --filter @barber/database generate",
+    "db:format": "pnpm --filter @barber/database format",
+    "db:validate": "pnpm --filter @barber/database validate",
+    "db:migrate": "pnpm --filter @barber/database migrate:dev",
+    "db:studio": "pnpm --filter @barber/database studio"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
-    "prettier": "^3.6.2",
-    "turbo": "^2.5.6"
-  },
-  "type": "module"
+    "prettier": "3.4.2",
+    "turbo": "2.5.6"
+  }
 }
