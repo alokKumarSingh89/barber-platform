@@ -1,0 +1,14 @@
+{
+    "name": "@barber/logger",
+    "version": "0.0.1",
+    "private": true,
+    "scripts": {
+        "build": "tsc"
+    },
+    "dependencies": {
+        "pino": "9.10.0"
+    },
+    "devDependencies": {
+        "typescript": "^5.7.3"
+    }
+}
