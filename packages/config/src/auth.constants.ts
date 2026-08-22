@@ -1,0 +1,9 @@
+export const AUTH_CONSTANTS = {
+  OTP_LENGTH: 6,
+  OTP_EXPIRY_SECONDS: 5 * 60,
+  MAX_OTP_ATTEMPTS: 5,
+  REFRESH_TOKEN_DAYS: 30,
+  ACCESS_TOKEN_MINUTES: 15,
+} as const;
+
+export type IAuthConstant = typeof AUTH_CONSTANTS;

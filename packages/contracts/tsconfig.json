@@ -3,7 +3,6 @@
     "target": "ES2023",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
-
     "strict": true,
 
     "declaration": true,
@@ -17,10 +16,7 @@
     "forceConsistentCasingInFileNames": true
   },
 
-  "include": [
-    "src/**/*.ts",
-    "../../apps/auth-service/src/auth/auth.controller.ts"
-  ],
+  "include": ["src/**/*.ts"],
 
   "exclude": ["dist", "node_modules"]
 }

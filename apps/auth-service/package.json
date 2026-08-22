@@ -25,6 +25,7 @@
     "@barber/database": "workspace:*",
     "@barber/logger": "workspace:*",
     "@nestjs/common": "^11.0.1",
+    "@nestjs/config": "^4.0.4",
     "@nestjs/core": "^11.0.1",
     "@nestjs/microservices": "^11.2.1",
     "@nestjs/platform-express": "^11.0.1",
