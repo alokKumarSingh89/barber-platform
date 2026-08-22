@@ -30,10 +30,32 @@ enum UserStatus {
   SUSPENDED
 }
 
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+  PREFER_NOT_TO_SAY
+}
+
+enum ShopMembershipRole {
+  OWNER
+  MANAGER
+  BARBER
+  STAFF
+}
+
+enum MembershipStatus {
+  ACTIVE
+  INVITED
+  SUSPENDED
+}
+
 model User {
   id String @id @default(uuid())
 
   email String @unique
+
+  phone String? @unique
 
   firstName String
   lastName  String?
@@ -42,10 +64,119 @@ model User {
 
   status UserStatus @default(ACTIVE)
 
+  customerProfile CustomerProfile?
+  barberProfile   BarberProfile?
+
+  shopMemberships ShopMembership[]
+
+  refreshTokens RefreshToken[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([role])
   @@index([status])
   @@index([createdAt])
+}
+
+model CustomerProfile {
+  id String @id @default(uuid())
+
+  userId String @unique
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  dateOfBirth DateTime?
+
+  gender Gender?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model BarberProfile {
+  id String @id @default(uuid())
+
+  userId String @unique
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  bio String?
+
+  experienceYears Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Shop {
+  id String @id @default(uuid())
+
+  name String
+
+  phone String?
+
+  email String?
+
+  addressLine1 String?
+  addressLine2 String?
+
+  city       String?
+  state      String?
+  postalCode String?
+  country    String?
+
+  latitude  Float?
+  longitude Float?
+
+  memberships ShopMembership[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([city])
+  @@index([state])
+}
+
+model ShopMembership {
+  id String @id @default(uuid())
+
+  userId String
+  shopId String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  shop Shop @relation(fields: [shopId], references: [id], onDelete: Cascade)
+
+  role ShopMembershipRole
+
+  status MembershipStatus @default(ACTIVE)
+
+  joinedAt DateTime @default(now())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, shopId])
+  @@index([shopId])
+  @@index([userId])
+}
+
+model RefreshToken {
+  id String @id @default(uuid())
+
+  userId String
+
+  tokenHash String @unique
+
+  expiresAt DateTime
+
+  revokedAt DateTime?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
 }
