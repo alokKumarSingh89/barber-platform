@@ -4,16 +4,18 @@
   "private": true,
   "packageManager": "pnpm@11.22.0",
   "scripts": {
-    "dev": "turbo dev",
-    "build": "turbo build",
-    "test": "turbo test",
-    "lint": "turbo lint",
-    "typecheck": "turbo typecheck",
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
     "db:generate": "pnpm --filter @barber/database generate",
-    "db:format": "pnpm --filter @barber/database format",
     "db:validate": "pnpm --filter @barber/database validate",
     "db:migrate": "pnpm --filter @barber/database migrate:dev",
-    "db:studio": "pnpm --filter @barber/database studio"
+    "db:migrate:deploy": "pnpm --filter @barber/database migrate:deploy",
+    "db:studio": "pnpm --filter @barber/database studio",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "devDependencies": {
     "prettier": "3.4.2",
