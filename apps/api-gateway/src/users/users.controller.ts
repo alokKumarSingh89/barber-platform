@@ -3,13 +3,21 @@ import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom, timeout } from 'rxjs';
 import { MessageEnvelope, USER_PATTERNS } from '@barber/contracts';
 import { randomUUID } from 'crypto';
+import { CurrentUser } from '../auth/current-user.decorator';
 
 @Controller('users')
 export class UsersController {
   constructor(
     @Inject('USER_SERVICE') private readonly userClient: ClientProxy,
   ) {}
-
+  @Get('me')
+  async me(@CurrentUser() user: { userId: string }) {
+    return firstValueFrom(
+      this.userClient.send<unknown>(USER_PATTERNS.ME, {
+        userId: user.userId,
+      }),
+    );
+  }
   @Get(':id')
   async getUser(
     @Param('id') id: string,

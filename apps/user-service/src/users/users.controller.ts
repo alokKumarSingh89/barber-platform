@@ -4,7 +4,11 @@ import { MessagePattern, Payload } from '@nestjs/microservices';
 
 import { UsersService } from './users.service';
 import { User } from '@barber/database';
-import { type GetUserRequest, USER_PATTERNS } from '@barber/contracts';
+import {
+  type GetCurrentUserRequest,
+  type GetUserRequest,
+  USER_PATTERNS,
+} from '@barber/contracts';
 
 @Controller()
 export class UsersController {
@@ -15,6 +19,12 @@ export class UsersController {
     @Payload()
     payload: GetUserRequest,
   ): Promise<User | null> {
+    console.log(payload, 'payload');
+    return this.usersService.findById(payload.userId);
+  }
+
+  @MessagePattern(USER_PATTERNS.ME)
+  async getCurrentUser(payload: GetCurrentUserRequest) {
     return this.usersService.findById(payload.userId);
   }
 }

@@ -7,9 +7,12 @@ import {
 import { generateOtp } from './otp.util';
 import { hashValue } from './hash.util';
 import { AUTH_CONSTANTS } from '@barber/config';
+import { JwtService } from '@nestjs/jwt';
+import { generateRefreshToken, hashToken } from './token.util';
 
 @Injectable()
 export class AuthService {
+  constructor(private readonly jwtService: JwtService) {}
   async createCustomer(
     input: CreateCustomerRequest,
   ): Promise<CreateCustomerResponse> {
@@ -31,7 +34,7 @@ export class AuthService {
     });
     return {
       id: user.id,
-      email: user.email,
+      email: user.email ?? '',
       phone: user.phone,
       firstName: user.firstName,
       lastName: user.lastName,
@@ -106,9 +109,66 @@ export class AuthService {
         verifiedAt: new Date(),
       },
     });
-    return {
-      verified: true,
+    const user = await this.findOrCreateCustomer(phone);
+    return this.issueTokens(user);
+  }
+  async createAccessToken(user: { id: string; role: string }) {
+    const payload = {
+      sub: user.id,
+      role: user.role,
+      type: 'access' as const,
     };
+
+    return this.jwtService.signAsync(payload);
+  }
+  async issueTokens(user: { id: string; role: string }) {
+    const accessToken = await this.createAccessToken(user);
+    const refreshToken = generateRefreshToken();
+    const tokenHash = hashToken(refreshToken);
+    const expiresAt = new Date();
+
+    expiresAt.setDate(expiresAt.getDate() + 30);
+    await prisma.refreshToken.create({
+      data: {
+        userId: user.id,
+
+        tokenHash,
+
+        expiresAt,
+      },
+    });
+    return {
+      accessToken,
+
+      refreshToken,
+
+      expiresIn: 900,
+    };
+  }
+  async findOrCreateCustomer(phone: string) {
+    const existing = await prisma.user.findUnique({
+      where: {
+        phone,
+      },
+    });
+    if (existing) {
+      return existing;
+    }
+    return prisma.user.create({
+      data: {
+        phone,
+
+        firstName: 'Customer',
+
+        role: UserRole.CUSTOMER,
+
+        status: UserStatus.ACTIVE,
+
+        customerProfile: {
+          create: {},
+        },
+      },
+    });
   }
   private normalizePhone(phone: string): string {
     return phone.trim().replace(/\s+/g, '');

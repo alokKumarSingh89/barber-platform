@@ -3,7 +3,26 @@ export const AUTH_PATTERNS = {
   VERIFY_OTP: "auth.otp.verify",
   REFRESH_TOKEN: "auth.token.refresh",
   CREATE_CUSTOMER: "auth.customer.create",
+  ACCESS: "access",
 } as const;
+
+export const TOKEN_EXPIRY = {
+  ACCESS: "15m",
+  REFRESH_DAYS: 30,
+} as const;
+
+export interface AccessTokenPayload {
+  sub: string;
+  role: string;
+  type: "access";
+  iat?: number;
+  exp?: number;
+}
+
+export interface AuthenticatedUser {
+  userId: string;
+  role: string;
+}
 
 export interface CreateCustomerRequest {
   email: string;

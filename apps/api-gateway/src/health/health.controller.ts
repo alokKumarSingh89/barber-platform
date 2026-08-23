@@ -5,6 +5,7 @@ import {
   HealthCheckService,
   MemoryHealthIndicator,
 } from '@nestjs/terminus';
+import { Public } from '../auth/public.decorator';
 
 @Controller('health')
 export class HealthController {
@@ -16,6 +17,7 @@ export class HealthController {
 
   @Get()
   @HealthCheck()
+  @Public()
   check() {
     return this.health.check([
       () => this.memory.checkHeap('memory_heap', 500 * 1024 * 1024),

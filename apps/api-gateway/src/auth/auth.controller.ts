@@ -8,6 +8,7 @@ import {
 import { Body, Controller, Inject, Post } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
+import { Public } from './public.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -15,6 +16,7 @@ export class AuthController {
     @Inject('AUTH_SERVICE') private readonly authClient: ClientProxy,
   ) {}
 
+  @Public()
   @Post('otp/request')
   async requestOtp(
     @Body() body: RequestOtpRequest,
@@ -24,6 +26,7 @@ export class AuthController {
     );
   }
 
+  @Public()
   @Post('otp/verify')
   async verifytOtp(@Body() body: VerifyOtpRequest): Promise<VerifyOtpResponse> {
     return firstValueFrom(this.authClient.send(AUTH_PATTERNS.VERIFY_OTP, body));
